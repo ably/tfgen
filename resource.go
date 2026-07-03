@@ -25,7 +25,7 @@ func (rs Resources) generate() map[string]map[string]any {
 type Resource struct {
 	Type   string // e.g. "aws_s3_bucket"
 	Name   string // e.g. "example"
-	Config map[string]any
+	Config Config
 }
 
 // Ref returns a Terraform expression referencing an attribute of this

@@ -27,7 +27,7 @@ type Module struct {
 	Name    string
 	Source  string
 	Version string
-	Config  map[string]any
+	Config  Config
 }
 
 // ModuleSource derives a module's Source from a consistent naming convention,

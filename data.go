@@ -25,7 +25,7 @@ func (ds DataSources) generate() map[string]map[string]any {
 type Data struct {
 	Type   string
 	Name   string
-	Config map[string]any
+	Config Config
 }
 
 // Ref returns a Terraform expression referencing an attribute of this data

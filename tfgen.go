@@ -22,14 +22,21 @@ type Generator interface {
 
 type Stacks []*Stack
 
-func (s Stacks) Write() error {
+// Write writes each stack to its conventional file at
+// {baseDir}/stacks/{name}/main.tf.json, creating directories as needed.
+func (s Stacks) Write(baseDir string) error {
 	for _, stack := range s {
-		json, err := stack.JSON()
+		f, err := StackOutputWriter(baseDir, stack.Name)
 		if err != nil {
 			return err
 		}
 
-		if _, err := stack.Output.Write(json); err != nil {
+		if err := stack.Write(f); err != nil {
+			f.Close()
+			return err
+		}
+
+		if err := f.Close(); err != nil {
 			return err
 		}
 	}
@@ -43,21 +50,24 @@ type Stack struct {
 	// Name is the name of the stack
 	Name string
 
-	// Output is where the generated Terraform configuration should be written
-	// to.
-	Output io.Writer
-
 	config TerraformConfig
 }
 
 // NewStack creates a new Stack with the given name and an empty Terraform
 // configuration.
-func NewStack(name string, output io.Writer) *Stack {
-	return &Stack{Name: name, Output: output}
+func NewStack(name string) *Stack {
+	return &Stack{Name: name}
 }
 
-func NewRequiredVersion(version string) *string {
-	return &version
+// Write writes the stack's Terraform JSON configuration to w.
+func (s *Stack) Write(w io.Writer) error {
+	data, err := s.JSON()
+	if err != nil {
+		return err
+	}
+
+	_, err = w.Write(data)
+	return err
 }
 
 func (s *Stack) SetTerraformBlock(block *TerraformBlock) {

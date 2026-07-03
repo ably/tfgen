@@ -2,9 +2,22 @@ package tfgen
 
 // TerraformBlock represents the terraform block in a Terraform configuration, which includes required_version, required_providers, and backend configuration.
 type TerraformBlock struct {
-	RequiredVersion   *string
-	RequiredProviders map[string]ProviderRequirement
+	RequiredVersion   string
+	RequiredProviders RequiredProviders
 	Backend           *Backend
+}
+
+// RequiredProviders maps a provider's local name to its source and version
+// requirement.
+type RequiredProviders map[string]ProviderRequirement
+
+// AddRequiredProvider records a provider requirement under the given local
+// name, allocating the map if necessary.
+func (block *TerraformBlock) AddRequiredProvider(name string, req ProviderRequirement) {
+	if block.RequiredProviders == nil {
+		block.RequiredProviders = make(RequiredProviders)
+	}
+	block.RequiredProviders[name] = req
 }
 
 // ProviderRequirement represents the required provider configuration in the terraform block, which includes the source and version of the provider.
@@ -16,14 +29,14 @@ type ProviderRequirement struct {
 // Backend represents the backend configuration in the terraform block, which includes the type of backend and its configuration.
 type Backend struct {
 	Type   string
-	Config map[string]any
+	Config Config
 }
 
 func (block *TerraformBlock) generate() map[string]any {
 	tfblock := make(map[string]any)
 
-	if rv := block.RequiredVersion; rv != nil {
-		tfblock["required_version"] = rv
+	if block.RequiredVersion != "" {
+		tfblock["required_version"] = block.RequiredVersion
 	}
 
 	if backend := block.Backend; backend != nil {
