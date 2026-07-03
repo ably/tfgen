@@ -1,3 +1,13 @@
+// Package tfgen generates Terraform JSON configuration from Go.
+//
+// You describe infrastructure with plain Go values. A [Stack] holds one
+// Terraform configuration, to which you add resources, data sources, modules,
+// providers, outputs, and variables. [Stack.Write] then serialises it to
+// Terraform JSON that any Terraform-compatible CLI (Terraform or OpenTofu) can
+// apply.
+//
+// The providers subpackages offer optional, typed constructors for common
+// providers.
 package tfgen
 
 import (
@@ -9,6 +19,9 @@ import (
 	"path/filepath"
 )
 
+// Generator produces one or more Terraform stacks from some configuration.
+// Implement it to organise larger configuration-generation logic behind a
+// single, testable entry point.
 type Generator interface {
 	// Validate checks that the generator's configuration is valid. This should
 	// be called before GenerateStacks to catch config errors early.
@@ -20,6 +33,7 @@ type Generator interface {
 	GenerateStacks() (Stacks, error)
 }
 
+// Stacks is a collection of Stack values.
 type Stacks []*Stack
 
 // Write writes each stack to its conventional file at
@@ -70,54 +84,67 @@ func (s *Stack) Write(w io.Writer) error {
 	return err
 }
 
+// SetTerraformBlock sets the stack's terraform block.
 func (s *Stack) SetTerraformBlock(block *TerraformBlock) {
 	s.config.TerraformBlock = block
 }
 
+// SetProviders replaces the stack's providers.
 func (s *Stack) SetProviders(providers []*Provider) {
 	s.config.Providers = providers
 }
 
+// AddProvider appends a provider to the stack.
 func (s *Stack) AddProvider(provider *Provider) {
 	s.config.Providers = append(s.config.Providers, provider)
 }
 
+// SetResources replaces the stack's resources.
 func (s *Stack) SetResources(resources []*Resource) {
 	s.config.Resources = resources
 }
 
+// AddResource appends a resource to the stack.
 func (s *Stack) AddResource(resource *Resource) {
 	s.config.Resources = append(s.config.Resources, resource)
 }
 
+// SetData replaces the stack's data sources.
 func (s *Stack) SetData(data []*Data) {
 	s.config.Data = data
 }
 
+// AddData appends a data source to the stack.
 func (s *Stack) AddData(data *Data) {
 	s.config.Data = append(s.config.Data, data)
 }
 
+// SetModules replaces the stack's modules.
 func (s *Stack) SetModules(modules []*Module) {
 	s.config.Modules = modules
 }
 
+// AddModule appends a module to the stack.
 func (s *Stack) AddModule(module *Module) {
 	s.config.Modules = append(s.config.Modules, module)
 }
 
+// SetOutputs replaces the stack's outputs.
 func (s *Stack) SetOutputs(outputs []*Output) {
 	s.config.Outputs = outputs
 }
 
+// AddOutput appends an output to the stack.
 func (s *Stack) AddOutput(output *Output) {
 	s.config.Outputs = append(s.config.Outputs, output)
 }
 
+// SetVariables replaces the stack's variables.
 func (s *Stack) SetVariables(variables []*Variable) {
 	s.config.Variables = variables
 }
 
+// AddVariable appends a variable to the stack.
 func (s *Stack) AddVariable(variable *Variable) {
 	s.config.Variables = append(s.config.Variables, variable)
 }

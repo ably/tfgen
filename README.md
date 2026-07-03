@@ -8,7 +8,8 @@ Generate Terraform configuration from Go.
 `tfgen` is a small library for building [Terraform JSON
 configuration](https://developer.hashicorp.com/terraform/language/syntax/json)
 programmatically in Go. You describe your infrastructure with plain Go values
-and `tfgen` emits `*.tf.json` that any Terraform-compatible CLI (Terraform or
+and `tfgen` emits `*.tf.json` that any Terraform-compatible CLI
+([Terraform](https://developer.hashicorp.com/terraform) or
 [OpenTofu](https://opentofu.org/)) can apply.
 
 Unlike Hashicorp's now unsupported
@@ -64,7 +65,7 @@ func main() {
 }
 ```
 
-Run `go generate ./...` to write `main.tf.json`, ready to commit and apply with
+Run `go generate ./...` to write `main.tf.json`, ready to apply with
 `terraform` or `tofu`:
 
 ```json
@@ -88,35 +89,17 @@ See [`examples/generate`](examples/generate) for a complete, runnable example.
 
 ## Concepts
 
-A `Stack` is one Terraform configuration. You add building blocks to it and
-then serialise it to JSON:
+A `Stack` is one Terraform configuration. You add building blocks to it, a
+`Resource`, `Data` source, `Module`, `Provider`, `Output`, `Variable`, or the
+`terraform` block, then serialise it to JSON. `Config` is a `map[string]any`, so
+any attribute maps directly onto Terraform's JSON syntax, and helpers such as
+`Resource.Ref` and `Variable.Ref` build interpolation references so you never
+hand-write `"${...}"` strings.
 
-| Type | Terraform block | Notes |
-| --- | --- | --- |
-| `Resource` | `resource` | `.Ref("attr")` builds a reference to an attribute |
-| `Data` | `data` | `.Ref("attr")` builds a reference to an attribute |
-| `Module` | `module` | `.OutputRef("name")` / `.Outputs(...)` for outputs; `ModuleSource` helps derive `source` |
-| `Provider` | `provider` | supports aliases |
-| `Output` | `output` | |
-| `Variable` | `variable` | `.Ref()` and `.CountRef()` for interpolations |
-| `TerraformBlock` | `terraform` | `required_version`, `required_providers`, `backend` |
-
-`Config` is just `map[string]any`, so it accepts arbitrary attributes and maps
-directly onto Terraform's JSON syntax. A plain map literal works anywhere a
-`Config` is expected.
-
-Write a single stack to any `io.Writer`:
-
-```go
-err := stack.Write(os.Stdout)
-```
-
-Or write a set of stacks to their conventional files at
-`{baseDir}/stacks/{name}/main.tf.json`:
-
-```go
-err := tfgen.Stacks{stack}.Write("infra")
-```
+Write a single stack to any `io.Writer` with `Stack.Write`, or write a set of
+stacks to their conventional files at `{baseDir}/stacks/{name}/main.tf.json`
+with `Stacks.Write`. See the
+[Go documentation](https://pkg.go.dev/github.com/ably/tfgen) for the full API.
 
 ## Provider helpers
 

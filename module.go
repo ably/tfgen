@@ -24,10 +24,10 @@ func (ms Modules) generate() map[string]any {
 
 // Module represents a module block in a Terraform configuration.
 type Module struct {
-	Name    string
-	Source  string
-	Version string
-	Config  Config
+	Name    string // local name of the module instance
+	Source  string // module source address
+	Version string // optional version constraint (registry modules only)
+	Config  Config // input variables passed to the module
 }
 
 // ModuleSource derives a module's Source from a consistent naming convention,

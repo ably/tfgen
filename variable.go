@@ -20,10 +20,10 @@ func (vs Variables) generate() map[string]any {
 
 // Variable represents a variable block in a Terraform configuration.
 type Variable struct {
-	Name        string
-	Type        string // e.g. "string", "bool", "map(string)"
-	Description string
-	Default     any // nil means required (no default key emitted)
+	Name        string // variable name
+	Type        string // Terraform type constraint, e.g. "string", "bool", "map(string)"
+	Description string // optional human-readable description
+	Default     any    // default value; nil marks the variable as required (no default emitted)
 }
 
 // Ref returns a Terraform expression referencing this variable,

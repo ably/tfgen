@@ -18,9 +18,9 @@ func (os Outputs) generate() map[string]any {
 
 // Output represents an output block in a Terraform configuration.
 type Output struct {
-	Name        string
-	Value       any
-	Description string
+	Name        string // output name
+	Value       any    // exported value, often a Ref to another block
+	Description string // optional human-readable description
 }
 
 func (o *Output) generate() map[string]any {

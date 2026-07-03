@@ -30,8 +30,8 @@ func (ps Providers) generate() map[string]any {
 
 // Provider represents a provider block in a Terraform configuration.
 type Provider struct {
-	Name   string
-	Config Config // includes "alias" if needed
+	Name   string // provider name, e.g. "aws"
+	Config Config // provider settings; include "alias" for additional configurations
 }
 
 func (p *Provider) generate() map[string]any {

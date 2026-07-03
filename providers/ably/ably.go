@@ -38,8 +38,8 @@ func Provider() *tfgen.Provider {
 type AppOptions struct {
 	Name    string // defaults to the resource label
 	Status  string // "enabled" or "disabled"
-	TLSOnly bool
-	FCMKey  string
+	TLSOnly bool   // restrict the app to TLS connections only
+	FCMKey  string // Firebase Cloud Messaging server key for push
 }
 
 // App creates an ably_app resource. The label seeds the app's name.
@@ -69,7 +69,7 @@ type APIKeyOptions struct {
 	Name            string              // defaults to the resource label
 	AppID           string              // required
 	Capabilities    map[string][]string // required; channel/namespace -> capabilities
-	RevocableTokens bool
+	RevocableTokens bool                // allow tokens issued by this key to be revoked
 }
 
 // APIKey creates an ably_api_key resource. The label seeds the key's name.
@@ -99,13 +99,13 @@ func APIKey(label string, opts ...APIKeyOptions) *tfgen.Resource {
 type NamespaceOptions struct {
 	ID               string // defaults to the resource label
 	AppID            string // required
-	Persisted        bool
-	PersistLast      bool
-	PushEnabled      bool
-	TLSOnly          bool
-	ExposeTimeserial bool
-	BatchingEnabled  bool
-	BatchingInterval int
+	Persisted        bool   // persist all messages on channels in this namespace
+	PersistLast      bool   // persist only the last message on each channel
+	PushEnabled      bool   // enable push notifications for this namespace
+	TLSOnly          bool   // restrict channels to TLS connections only
+	ExposeTimeserial bool   // expose the message timeserial to clients
+	BatchingEnabled  bool   // enable server-side message batching
+	BatchingInterval int    // batching window in milliseconds
 }
 
 // Namespace creates an ably_namespace resource. The label seeds the namespace

@@ -23,9 +23,9 @@ func (ds DataSources) generate() map[string]map[string]any {
 
 // Data represents a data source block in a Terraform configuration.
 type Data struct {
-	Type   string
-	Name   string
-	Config Config
+	Type   string // data source type, e.g. "aws_ami"
+	Name   string // local name, unique per type within the stack
+	Config Config // the data source's arguments
 }
 
 // Ref returns a Terraform expression referencing an attribute of this data
