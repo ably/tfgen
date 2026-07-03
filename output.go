@@ -1,0 +1,36 @@
+package tfgen
+
+// Outputs is a collection of Output configurations.
+type Outputs []*Output
+
+func (os Outputs) generate() map[string]any {
+	if len(os) == 0 {
+		return nil
+	}
+
+	out := make(map[string]any, len(os))
+	for _, o := range os {
+		out[o.Name] = o.generate()
+	}
+
+	return out
+}
+
+// Output represents an output block in a Terraform configuration.
+type Output struct {
+	Name        string
+	Value       any
+	Description string
+}
+
+func (o *Output) generate() map[string]any {
+	out := map[string]any{
+		"value": o.Value,
+	}
+
+	if o.Description != "" {
+		out["description"] = o.Description
+	}
+
+	return out
+}
