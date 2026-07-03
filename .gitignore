@@ -13,6 +13,9 @@ coverage.*
 go.work
 go.work.sum
 
+# Generated output from the go generate example
+examples/generate/stacks/
+
 # Editor and OS cruft
 .idea/
 .vscode/
