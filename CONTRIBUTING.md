@@ -80,8 +80,11 @@ is simply an annotated, signed Git tag of the form `vX.Y.Z`; pkg.go.dev and
    git push origin vX.Y.Z
    ```
 
-5. Create a [GitHub release](https://github.com/ably/tfgen/releases) from the
-   tag, using the changelog entry as the release notes.
+5. Pushing the tag triggers the release workflow
+   ([`.github/workflows/release.yml`](.github/workflows/release.yml)), which
+   creates the [GitHub release](https://github.com/ably/tfgen/releases) with
+   generated notes. Review it afterwards and fold in the changelog entry if you
+   like.
 
 ## Licence
 
