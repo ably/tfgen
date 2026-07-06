@@ -1,7 +1,10 @@
-# tfgen
-
+![tfgen](/image/tfgen-github-v1.0.png)
 [![Go Reference](https://pkg.go.dev/badge/github.com/ably/tfgen.svg)](https://pkg.go.dev/github.com/ably/tfgen)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![License](https://badgen.net/github/license/ably/tfgen)](https://github.com/ably/tfgen/blob/main/LICENSE)
+
+---
+
+# tfgen
 
 Generate Terraform configuration from Go.
 
