@@ -46,7 +46,7 @@ func (s Stacks) Write(baseDir string) error {
 		}
 
 		if err := stack.Write(f); err != nil {
-			f.Close()
+			_ = f.Close() // already returning a write error
 			return err
 		}
 
