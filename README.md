@@ -15,8 +15,7 @@ and `tfgen` emits `*.tf.json` that any Terraform-compatible CLI
 ([Terraform](https://developer.hashicorp.com/terraform) or
 [OpenTofu](https://opentofu.org/)) can apply.
 
-Unlike Hashicorp's now unsupported
-[CDKTF](https://developer.hashicorp.com/terraform/cdktf), configuration is
+Unlike [CDKTN](https://cdktn.io), configuration is
 entirely flexible and does not depend on generating strong types based off
 provider versions. This means you can reliably and quickly generate
 Terraform-compatible JSON using easy to understand Go.
